@@ -1,13 +1,45 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthProvider/AuthProvider";
+import Loading from "../components/Loading";
 
 const Login = () => {
+  const { user, loading, login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // Implement your login logic here
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    try {
+      login(email, password)
+        .then((res) => {
+          const { user: currentUser } = res;
+
+          if (currentUser) {
+            navigate("/dashboard", { replace: true });
+          }
+        })
+        .catch((err) => {
+          setError(err.message.split("/")[1].split(").")[0]);
+        });
+    } catch (error) {
+      setError(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -78,10 +110,15 @@ const Login = () => {
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Log in
+                {isLoading ? "Loading..." : "Log in"}
               </button>
             </div>
           </form>
+          {error && (
+            <div className="bg-red-100 border text-center border-red-400 text-red-700 px-4 py-3 rounded mt-4">
+              <p className="uppercase">{error}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

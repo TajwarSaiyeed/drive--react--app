@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthProvider/AuthProvider";
 
 function Dashboard() {
+  const { user } = useAuth();
   return (
-    <div className="bg-gray-900 h-screen text-white flex flex-col items-center justify-center">
+    <div className="bg-gray-900 h-screen text-center text-white flex flex-col items-center justify-center">
       <h1 className="text-4xl font-bold mb-8">Welcome to your Dashboard</h1>
       <div className="max-w-md mx-auto text-center">
         <p className="mb-4">
@@ -19,8 +21,8 @@ function Dashboard() {
           Update Profile
         </Link>
         <p className="mt-8">
-          Your email address is{" "}
-          <span className="font-bold">user@example.com</span>.
+          Your email address is <span className="font-bold">{user?.email}</span>
+          .
         </p>
       </div>
     </div>

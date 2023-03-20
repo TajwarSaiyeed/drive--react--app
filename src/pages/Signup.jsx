@@ -1,22 +1,52 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthProvider/AuthProvider";
+import Loading from "../components/Loading";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const { user, loading, signup } = useAuth();
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate an API call
-    setTimeout(() => {
+    if (password !== confirmPassword) {
       setIsLoading(false);
-      alert("Signup successful!");
-    }, 2000);
+      return setError("Passwords do not match");
+    }
+
+    try {
+      signup(email, password)
+        .then((res) => {
+          const { user: currentUser } = res;
+
+          if (currentUser) {
+            navigate("/dashboard", { replace: true });
+          }
+        })
+        .catch((err) => {
+          setError(err.message.split("/")[1].split(").")[0]);
+        });
+    } catch (error) {
+      setError(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -109,25 +139,15 @@ const Signup = () => {
                 type="submit"
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                  <svg
-                    className="h-5 w-5 text-blue-500 group-hover:text-blue-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3 3a1 1 0 011-1h12a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3zm3.293 1.293a1 1 0 011.414 0L11 5.586l2.293-2.293a1 1 0 111.414 1.414l-2.293 2.293 2.293 2.293a1 1 0 01-1.414 1.414L11 8.414l-2.293 2.293a1 1 0 01-1.414-1.414l2.293-2.293-2.293-2.293a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </span>
                 {isLoading ? "Loading..." : "Sign up"}
               </button>
             </div>
           </form>
+          {error && (
+            <div className="bg-red-100 border text-center border-red-400 text-red-700 px-4 py-3 rounded mt-4">
+              <p className="uppercase">{error}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import ForgetPassword from "../pages/ForgetPassword";
 import UpdateProfile from "../pages/UpdateProfile";
 import NotFound from "../pages/NotFound";
 import Dashboard from "../pages/Dashboard";
+import PrivateRoute from "./PrivateRoute";
 
 export const routes = createBrowserRouter([
   {
@@ -30,7 +31,11 @@ export const routes = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard />,
+    element: (
+      <PrivateRoute>
+        <Dashboard />
+      </PrivateRoute>
+    ),
   },
   {
     path: "*",
