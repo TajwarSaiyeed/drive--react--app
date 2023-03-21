@@ -1,5 +1,6 @@
 import React, { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
+const Dashboard = lazy(() => import("../pages/Dashboard"));
 const Home = lazy(() => import("../pages/Home"));
 const Signup = lazy(() => import("../pages/Signup"));
 const Login = lazy(() => import("../pages/Login"));
@@ -35,6 +36,14 @@ export const routes = createBrowserRouter([
     element: (
       <PrivateRoute>
         <Profile />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <Dashboard />
       </PrivateRoute>
     ),
   },
