@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { database } from "../firebase/firebase";
 import {
   collection,
@@ -50,6 +50,7 @@ const reducer = (state, { type, payload }) => {
 };
 
 export const useFolder = (folderId = null, folder = null) => {
+  const [refetch, setRefetch] = useState(false);
   const { user } = useAuth();
   const [state, dispatch] = useReducer(reducer, {
     folderId,
@@ -103,7 +104,7 @@ export const useFolder = (folderId = null, folder = null) => {
       where("userId", "==", user.uid),
       orderBy("createdAt")
     );
-    const querySnapshot = getDocs(q)
+    const unsubscribe = getDocs(q)
       .then((querySnapshot) => {
         dispatch({
           type: ACTIONS.SET_CHILD_FOLDERS,
@@ -116,8 +117,8 @@ export const useFolder = (folderId = null, folder = null) => {
         console.log(error);
       });
 
-    console.log(querySnapshot);
-  }, [folderId, user]);
+    return () => unsubscribe;
+  }, [folderId, user, refetch]);
 
-  return state;
+  return { state, setRefetch };
 };
