@@ -1,12 +1,13 @@
+import React, { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import Home from "../pages/Home";
-import Signup from "../pages/Signup";
-import Login from "../pages/Login";
-import ForgetPassword from "../pages/ForgetPassword";
-import UpdateProfile from "../pages/UpdateProfile";
-import NotFound from "../pages/NotFound";
-import Dashboard from "../pages/Dashboard";
-import PrivateRoute from "./PrivateRoute";
+const Home = lazy(() => import("../pages/Home"));
+const Signup = lazy(() => import("../pages/Signup"));
+const Login = lazy(() => import("../pages/Login"));
+const ForgetPassword = lazy(() => import("../pages/ForgetPassword"));
+const UpdateProfile = lazy(() => import("../pages/UpdateProfile"));
+const Profile = lazy(() => import("../pages/Profile"));
+const NotFound = lazy(() => import("../pages/NotFound"));
+const PrivateRoute = lazy(() => import("./PrivateRoute"));
 
 export const routes = createBrowserRouter([
   {
@@ -30,10 +31,10 @@ export const routes = createBrowserRouter([
     element: <UpdateProfile />,
   },
   {
-    path: "/dashboard",
+    path: "/profile",
     element: (
       <PrivateRoute>
-        <Dashboard />
+        <Profile />
       </PrivateRoute>
     ),
   },

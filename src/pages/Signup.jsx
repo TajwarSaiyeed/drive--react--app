@@ -27,7 +27,7 @@ const Signup = () => {
           const { user: currentUser } = res;
 
           if (currentUser) {
-            navigate("/dashboard", { replace: true });
+            navigate("/", { replace: true });
           }
         })
         .catch((err) => {
@@ -45,7 +45,7 @@ const Signup = () => {
   }
 
   if (user) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return (

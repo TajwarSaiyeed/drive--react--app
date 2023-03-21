@@ -20,7 +20,7 @@ const Login = () => {
           const { user: currentUser } = res;
 
           if (currentUser) {
-            navigate("/dashboard", { replace: true });
+            navigate("/", { replace: true });
           }
         })
         .catch((err) => {
@@ -38,7 +38,7 @@ const Login = () => {
   }
 
   if (user) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return (
@@ -119,6 +119,14 @@ const Login = () => {
               <p className="uppercase">{error}</p>
             </div>
           )}
+          <div>
+            <Link
+              to={"/forgot-password"}
+              className="w-full mt-5 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Forget Password
+            </Link>
+          </div>
         </div>
       </div>
     </div>

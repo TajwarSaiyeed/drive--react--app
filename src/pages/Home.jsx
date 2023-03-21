@@ -81,6 +81,12 @@ function Home() {
                 >
                   Dashboard
                 </Link>
+                <Link
+                  to="/profile"
+                  className="text-gray-500 hover:text-gray-600 font-medium mr-4"
+                >
+                  Profile
+                </Link>
                 <button
                   onClick={() =>
                     logout()

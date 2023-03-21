@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider/AuthProvider";
 
-function Dashboard() {
+function Profile() {
   const { user } = useAuth();
   return (
     <div className="bg-gray-900 h-screen text-center text-white flex flex-col items-center justify-center">
@@ -29,4 +29,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Profile;
