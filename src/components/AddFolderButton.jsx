@@ -1,16 +1,32 @@
 import React, { useState } from "react";
 
 import { AiFillFolderAdd } from "react-icons/ai";
+import { database } from "../firebase/firebase";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { useAuth } from "../contexts/AuthProvider/AuthProvider";
 
-const AddFolderButton = () => {
+const AddFolderButton = ({ currentFolder }) => {
   const [folderName, setFolderName] = useState("");
+  const { user } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!folderName) return;
     console.log(folderName);
 
+    if (currentFolder === null) return;
     // TODO: Create a new folder in firebase
+    try {
+      const docRef = await addDoc(collection(database, "folders"), {
+        name: folderName,
+        userId: user.uid,
+        createdAt: serverTimestamp(),
+        parentId: currentFolder?.id,
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
 
     setFolderName("");
   };
