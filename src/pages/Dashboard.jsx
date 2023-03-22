@@ -14,8 +14,6 @@ const Dashboard = () => {
     setRefetch,
   } = useFolder(folderId, state?.folder);
 
-  console.log(childFiles);
-
   let path = folder === ROOT_FOLDER ? [ROOT_FOLDER] : [ROOT_FOLDER];
   if (folder) path = [...path, ...folder?.path];
 
