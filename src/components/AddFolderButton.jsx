@@ -34,7 +34,6 @@ const AddFolderButton = ({ currentFolder, setRefetch }) => {
         parentId: currentFolder?.id,
         path: path || [],
       });
-      console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
     } finally {
