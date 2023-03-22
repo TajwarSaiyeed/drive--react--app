@@ -4,6 +4,7 @@ import AddFolderButton from "../components/AddFolderButton";
 import { ROOT_FOLDER, useFolder } from "../hooks/useFolder";
 import Folder from "../components/Folder";
 import { Link, useParams, useLocation } from "react-router-dom";
+import AddFileButton from "../components/AddFileButton";
 
 const Dashboard = () => {
   const { folderId } = useParams();
@@ -39,13 +40,14 @@ const Dashboard = () => {
             </ul>
           </div>
           <div className="flex gap-2">
+            <AddFileButton currentFolder={folder} setRefetch={setRefetch} />
             <AddFolderButton currentFolder={folder} setRefetch={setRefetch} />
           </div>
         </div>
         {childFolders?.length > 0 && (
-          <div className="flex flex-wrap">
+          <div className="grid grid-cols-1 justify-items-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {childFolders?.map((childFolder) => (
-              <div key={childFolder.id} className="w-1/5 p-2">
+              <div key={childFolder.id} className="p-2">
                 <Folder folder={childFolder} />
               </div>
             ))}

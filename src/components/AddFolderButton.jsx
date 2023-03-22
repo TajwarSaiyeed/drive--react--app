@@ -17,8 +17,6 @@ const AddFolderButton = ({ currentFolder, setRefetch }) => {
 
     if (currentFolder === null) return;
 
-    console.log("currentFolder", currentFolder);
-
     const path = [...currentFolder?.path];
 
     // console.log("path", path);
@@ -53,7 +51,7 @@ const AddFolderButton = ({ currentFolder, setRefetch }) => {
         onClick={() => setShowModal(true)}
         className="w-12 h-12 btn-xs btn bg-white text-green-400 border border-green-400"
       >
-        <AiFillFolderAdd fontSize={20} />
+        <AiFillFolderAdd fontSize={24} />
       </label>
 
       <input type="checkbox" id="add-folder" className="modal-toggle" />

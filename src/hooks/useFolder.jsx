@@ -90,12 +90,10 @@ export const useFolder = (folderId = null, folder = null) => {
         });
       })
       .catch((error) => {
-        console.log(error);
         dispatch({
           type: ACTIONS.UPDATE_FOLDER,
           payload: { folder: ROOT_FOLDER },
         });
-
       });
   }, [folderId]);
 
