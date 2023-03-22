@@ -56,7 +56,7 @@ const Dashboard = () => {
           </div>
         )}
 
-        {childFolders?.length === 0 && childFiles?.length === 0 && <hr />}
+        {childFolders?.length > 0 && childFiles?.length > 0 && <hr />}
         {childFiles?.length > 0 && (
           <div className="grid grid-cols-1 justify-items-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {childFiles?.map((childFile) => (
@@ -64,13 +64,20 @@ const Dashboard = () => {
                 {/* <Folder folder={childFile} /> */}
                 <div className="w-[300px] h-[300px] rounded-lg bg-slate-200 shadow-md p-4">
                   <div className="flex flex-col gap-2 justify-center items-center">
-                    <div className="flex-shrink-0">
+                    <a
+                      href={childFile?.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      // download to download the file
+                      download
+                      className="flex-shrink-0"
+                    >
                       <img
                         className="h-[200px] w-full object-cover rounded"
                         src={childFile?.url}
                         alt={childFile?.name}
                       />
-                    </div>
+                    </a>
                     <div className="ml-4">
                       <div className="text-sm font-medium text-gray-900">
                         {childFile?.name}
