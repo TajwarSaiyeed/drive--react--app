@@ -48,6 +48,14 @@ export const routes = createBrowserRouter([
     ),
   },
   {
+    path: "/folder/:folderId",
+    element: (
+      <PrivateRoute>
+        <Dashboard />
+      </PrivateRoute>
+    ),
+  },
+  {
     path: "*",
     element: <NotFound />,
   },

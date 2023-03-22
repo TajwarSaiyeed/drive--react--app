@@ -109,7 +109,12 @@ export const useFolder = (folderId = null, folder = null) => {
         dispatch({
           type: ACTIONS.SET_CHILD_FOLDERS,
           payload: {
-            childFolders: querySnapshot.docs.map((doc) => doc.data()),
+            childFolders: querySnapshot.docs.map((doc) => {
+              return {
+                id: doc.id,
+                ...doc.data(),
+              };
+            }),
           },
         });
       })

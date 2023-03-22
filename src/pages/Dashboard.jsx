@@ -3,12 +3,16 @@ import Navbar from "../components/Navbar";
 import AddFolderButton from "../components/AddFolderButton";
 import { useFolder } from "../hooks/useFolder";
 import Folder from "../components/Folder";
+import { useParams } from "react-router-dom";
 
 const Dashboard = () => {
+  const { folderId } = useParams();
   const {
     state: { folder, childFolders },
     setRefetch,
-  } = useFolder("5czHXR4SoAPnZaOKtkE2");
+  } = useFolder(folderId);
+
+  console.log(folderId);
 
   return (
     <>
@@ -28,13 +32,12 @@ const Dashboard = () => {
           </div>
           <div className="flex gap-2">
             <AddFolderButton currentFolder={folder} setRefetch={setRefetch} />
-            <AddFolderButton currentFolder={folder} setRefetch={setRefetch} />
           </div>
         </div>
         {childFolders?.length > 0 && (
           <div className="flex flex-wrap">
-            {childFolders?.map((childFolder, i) => (
-              <div key={i} className="w-1/5 p-2">
+            {childFolders?.map((childFolder) => (
+              <div key={childFolder.id} className="w-1/5 p-2">
                 <Folder folder={childFolder} />
               </div>
             ))}
