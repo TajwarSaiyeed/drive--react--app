@@ -1,37 +1,62 @@
 import React from "react";
 import { AiFillFileAdd } from "react-icons/ai";
-import { storage } from "../firebase/firebase";
+import { storage, database } from "../firebase/firebase";
 import { useAuth } from "../contexts/AuthProvider/AuthProvider";
-import { ref, uploadBytes } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  //   uploadBytes,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 const AddFileButton = ({ currentFolder, setRefetch }) => {
   const { user } = useAuth();
-  const handleAddFile = (e) => {
+  const handleAddFile = async (e) => {
     e.preventDefault();
 
     const file = e?.target?.files[0];
 
     if (currentFolder === null || file == null) return;
 
-    // const filePath =
-    //   currentFolder?.path.length > 0
-    //     ? `${currentFolder.path.map((f) => f.name).join("/")}/${
-    //         currentFolder.name
-    //       }/${file.name}`
-    //     : currentFolder?.name;
+    console.log(currentFolder?.path);
 
     const filePath =
       currentFolder?.path.length > 0
-        ? `${currentFolder?.path?.join("/")}/${currentFolder?.name}/${
-            file?.name
-          }`
+        ? `${currentFolder.path.map((f) => f.name).join("/")}/${
+            currentFolder.name
+          }/${file.name}`
         : file?.name;
 
     const storageRef = ref(storage, `/files/${user.uid}/${filePath}`);
 
-    uploadBytes(storageRef, file).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-    });
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+      },
+      (error) => {
+        // Handle unsuccessful uploads
+        console.log(error);
+      },
+      () => {
+        // Handle successful uploads on complete
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+          const docRef = await addDoc(collection(database, "files"), {
+            url: downloadURL,
+            name: file.name,
+            createdAt: serverTimestamp(),
+            folderId: currentFolder.id,
+            userId: user.uid,
+          });
+
+          console.log("Document written with ID: ", docRef.id);
+        });
+      }
+    );
   };
 
   return (
