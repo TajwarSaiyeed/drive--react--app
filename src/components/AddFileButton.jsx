@@ -19,8 +19,6 @@ const AddFileButton = ({ currentFolder, setRefetch }) => {
 
     if (currentFolder === null || file == null) return;
 
-    console.log(currentFolder?.path);
-
     const filePath =
       currentFolder?.path.length > 0
         ? `${currentFolder.path.map((f) => f.name).join("/")}/${
@@ -45,15 +43,15 @@ const AddFileButton = ({ currentFolder, setRefetch }) => {
       () => {
         // Handle successful uploads on complete
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          const docRef = await addDoc(collection(database, "files"), {
+          await addDoc(collection(database, "files"), {
             url: downloadURL,
-            name: file.name,
+            name: file?.name,
             createdAt: serverTimestamp(),
-            folderId: currentFolder.id,
-            userId: user.uid,
+            folderId: currentFolder?.id,
+            userId: user?.uid,
           });
 
-          console.log("Document written with ID: ", docRef.id);
+          setRefetch((prev) => !prev);
         });
       }
     );

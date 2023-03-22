@@ -125,5 +125,33 @@ export const useFolder = (folderId = null, folder = null) => {
     return () => unsubscribe;
   }, [folderId, user, refetch]);
 
+  useEffect(() => {
+    const q = query(
+      collection(database, "files"),
+      where("folderId", "==", folderId),
+      where("userId", "==", user.uid),
+      orderBy("createdAt")
+    );
+    const unsubscribe = getDocs(q)
+      .then((querySnapshot) => {
+        dispatch({
+          type: ACTIONS.SET_CHILD_FILES,
+          payload: {
+            childFiles: querySnapshot.docs.map((doc) => {
+              return {
+                id: doc.id,
+                ...doc.data(),
+              };
+            }),
+          },
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    return () => unsubscribe;
+  }, [folderId, user, refetch]);
+
   return { state, setRefetch };
 };
